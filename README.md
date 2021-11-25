@@ -91,19 +91,20 @@ python3 /opt/intel/openvino_2021.4.689/deployment_tools/tools/benchmark_tool/ben
 -d MYRIAD # change to CPU to run model on the CPU
 ```
 
-Finally, to look at the detection results on the NCS2, we can use the yolov5_demo.git repository.
+Finally, to look at the detection results, we can use the yolov5_demo.git repository. Download the coco labels from: https://github.com/amikelive/coco-labels/blob/master/coco-labels-2014_2017.txt
 
 ```console
 cd ../yolov5_demo/
+wget https://raw.githubusercontent.com/amikelive/coco-labels/master/coco-labels-2014_2017.txt
 ```
 
-Download the coco labels from: https://github.com/amikelive/coco-labels/blob/master/coco-labels-2014_2017.txt and copy them into the yolov5_demo folder.
+Now run the demo script with parameters of your choosing.
 
 ```console
 python3 yolov5_demo_OV2021.3.py \
 --input cam \
 --model ../yolov5/models/yolov5s_simpl_FP16.xml \
--d MYRIAD \
+-d MYRIAD \ # or CPU
 --labels coco-labels-2014_2017.txt \
 -t 0.5
 ```
