@@ -7,7 +7,7 @@ Yolov5 is supported by the Openvino Toolkit. This means it can be converted and 
 
 
 ## Used Repositories
-Oficial yolov5 repository: https://github.com/ultralytics/yolov5
+Official yolov5 repository: https://github.com/ultralytics/yolov5
 
 A yolov5 on Openvino demo repository: https://github.com/violet17/yolov5_demo.git
 
