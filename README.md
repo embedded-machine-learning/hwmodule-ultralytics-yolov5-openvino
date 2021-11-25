@@ -1,4 +1,4 @@
-# yolo-v3v5-in-Openvino
+# hwmodule-ultralytics-yolov5-openvino
 This is a repository containing a workflow for the conversion of Yolov3 and Yolov5 from Pytorch to Openvino over ONNX and bounding box evaluation of the network
 
 # YOLOV5
