@@ -7,10 +7,12 @@
 setup_env()
 {
   # Environment preparation
-  echo Activate environment $PYTHONENV
+  #echo Activate environment $PYTHONENV
   #call conda activate %PYTHONENV%
   #Environment is put directly in the nuc home folder
-  . ~/tf2odapi/init_eda_env.sh
+  . ./init_env.sh
+  #echo "Setup task spooler socket."
+  . ./init_ts.sh
 }
 
 get_model_name()
@@ -129,9 +131,6 @@ setup_env
 
 #Setup openvino environment
 source $OPENVINOINSTALLDIR/bin/setupvars.sh
-
-#echo "Setup task spooler socket."
-. ~/tf2odapi/init_eda_ts.sh
 
 #Extract height and width from model
 get_width_and_height
