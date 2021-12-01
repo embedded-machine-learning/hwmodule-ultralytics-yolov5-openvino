@@ -6,26 +6,11 @@
 
 setup_env()
 {
-  PYTHONENV=yolov5_py38
-  
-  # Environment preparation
-  #echo "Activate environment $PYTHONENV"
-  #call conda activate %PYTHONENV%
-  #Activate object detection API
-  #. ~/tf2odapi/init_eda_env.sh
-
-  # echo "Activate python environment and add python path variables" $PYTHONENV
-  #source $PYTHONENV
-  
-  # Environment preparation
-  echo Activate environment $PYTHONENV
-  source ~/tf2odapi/venv/$PYTHONENV/bin/activate
-  #source ~/tf2odapi/venv/venv_yolov5_py38/bin/activate
-  
-  echo "Setup task spooler socket."
+  # Init environment
+  . ./init_env.sh
+  # Init task spooler
   . ./init_ts.sh
   
-  # Set alias python3 if applicable
   alias python=python3.8
 }
 
@@ -161,7 +146,7 @@ evaluate_model()
   echo "# Evaluate with Coco Metrics"
   echo "#====================================#"
   echo "coco evaluation"
-  python $SCRIPTPREFIX/inference_evaluation/objdet_pycoco_evaluation.py \
+  python $SCRIPTPREFIX/inference_evaluation/eval_pycocotools.py \
   --groundtruth_file="$DATASET/annotations/coco_val_annotations.json" \
   --detection_file="results/$MODELNAME/$HARDWARENAME/coco_detections.json" \
   --output_file="results/performance_$HARDWARENAME.csv" \
@@ -173,7 +158,7 @@ evaluate_model()
   echo "# Merge results to one result table"
   echo "#====================================#"
   echo "merge latency and evaluation metrics"
-  python $SCRIPTPREFIX/inference_evaluation/merge_results.py \
+  python $SCRIPTPREFIX/inference_evaluation/eval_merge_results.py \
   --latency_file="results/latency_$HARDWARENAME.csv" \
   --coco_eval_file="results/performance_$HARDWARENAME.csv" \
   --output_file="results/combined_results_$HARDWARENAME.csv"
@@ -194,8 +179,8 @@ USERNAME=wendt
 USEREMAIL=alexander.wendt@tuwien.ac.at
 #MODELNAME=tf2oda_efficientdetd0_320_240_coco17_pedestrian_all_LR002
 #MODELNAME=pt_yolov5s_640x360_peddet_OLD
-SCRIPTPREFIX=../../scripts-and-guides/scripts
-DATASET=../../datasets/pedestrian_detection_graz_val_only_ss10
+SCRIPTPREFIX=../../eml-tools
+DATASET=../../../datasets/dataset-oxford-pets-val-debug
 #DATASET=../../datasets/pedestrian_detection_graz_val_only_debug
 HARDWARENAME=IntelNUC
 # Set this variable true if the network shall be trained, else only inference shall be performed

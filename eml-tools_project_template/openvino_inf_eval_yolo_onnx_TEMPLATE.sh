@@ -10,7 +10,12 @@ setup_env()
   echo Activate environment $PYTHONENV
   #call conda activate %PYTHONENV%
   #Environment is put directly in the nuc home folder
-  . ~/tf2odapi/init_eda_env.sh
+  . ./init_env_openvino.sh
+  
+  echo "Setup task spooler socket."
+  . ./init_ts.sh
+  
+  alias python=python3.8
 }
 
 get_model_name()
@@ -97,7 +102,7 @@ infer()
   echo ' Evaluate with Coco Metrics'
   echo '===================================='
 
-  python $SCRIPTPREFIX/inference_evaluation/objdet_pycoco_evaluation.py \
+  python $SCRIPTPREFIX/inference_evaluation/eval_pycocotools.py \
   --groundtruth_file=$DATASET/annotations/coco_val_annotations.json \
   --detection_file=results/$MODELNAME/$HARDWARENAME\_$HARDWARETYPE/coco_detections.json \
   --output_file=results/performance_$HARDWARENAME.csv \
@@ -109,7 +114,7 @@ infer()
   echo '  Merge results to one result table'
   echo '===================================='
   echo merge latency and evaluation metrics
-  python3 $SCRIPTPREFIX/inference_evaluation/merge_results.py \
+  python3 $SCRIPTPREFIX/inference_evaluation/eval_merge_results.py \
   --latency_file=results/latency_$HARDWARENAME.csv \
   --coco_eval_file=results/performance_$HARDWARENAME.csv \
   --output_file=results/combined_results_$HARDWARENAME.csv
@@ -128,13 +133,10 @@ echo #==============================================#
 # Constant Definition
 #USEREMAIL=alexander.wendt@tuwien.ac.at
 #MODELNAME=tf2oda_efficientdet_512x384_pedestrian_D0_LR02
-#MODELNAME=tf2oda_ssdmobilenetv2_300x300_pets_D100_OVFP16
-PYTHONENV=tf24
-SCRIPTPREFIX=../../scripts-and-guides/scripts
+SCRIPTPREFIX=../../eml-tools
 HARDWARENAME=IntelNUC
-DATASET=../../datasets/pedestrian_detection_graz_val_only_ss10
+DATASET=../../../datasets/dataset-oxford-pets-val-debug
 #DATASET=../../datasets/pedestrian_detection_graz_val_only_debug
-#LABELMAP=label_map.pbtxt
 
 #Openvino installation directory for the inferrer (not necessary the same as the model optimizer)
 #OPENVINOINSTALLDIR=/opt/intel/openvino_2021
@@ -155,14 +157,9 @@ setup_env
 
 #echo "Start training of $MODELNAME on EDA02" | mail -s "Start training of $MODELNAME" $USEREMAIL
 
-echo "Setup task spooler socket."
-. ~/tf2odapi/init_eda_ts.sh
-
 #Setup openvino environment
 echo "Setup Openvino environment and variables"
 source $OPENVINOINSTALLDIR/bin/setupvars.sh
-
-alias python=python3
 
 for HARDWARETYPE in $HARDWARETYPELIST
 do

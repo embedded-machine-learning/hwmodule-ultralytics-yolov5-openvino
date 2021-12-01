@@ -191,4 +191,5 @@ MODELSOURCE=exported-models-openvino/*	#No need to change this
 
 ## Running the system
 1. Convert each exported model by running ```./convert_yolo_onnx_to_ir_[MODELNAME].sh```. You now get an FP16 and an FP32 model in ```./exported-models-openvino```
-2. Run either ```add_folder_infopenvino_jobs.sh``` and ```add_folder_infpt_jobs.sh``` or just ```add_all_inference.sh```
+2. Run either ```add_folder_infopenvino_jobs.sh``` and ```add_folder_infpt_jobs.sh``` or just ```add_all_inference.sh```. If everything works, all inferences are executed
+and the results are put in the ```./results``` folder under the name ```combined_results_[HARDWARENAME].csv```

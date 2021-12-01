@@ -7,7 +7,7 @@
 setup_env()
 {
   # Environment preparation
-  #echo Activate environment $PYTHONENV
+  echo Activate environment $PYTHONENV
   #call conda activate %PYTHONENV%
   #Environment is put directly in the nuc home folder
   . ./init_env.sh
@@ -107,7 +107,7 @@ USEREMAIL=alexander.wendt@tuwien.ac.at
 MODELNAME=tf2oda_ssdmobilenetv2_300x300_pets_D100
 PYTHONENV=tf24
 BASEPATH=`pwd`
-SCRIPTPREFIX=../../scripts-and-guides/scripts
+SCRIPTPREFIX=../../eml-tools
 MODELSOURCE=jobs/*.config
 HARDWARENAME=IntelNUC
 LABELMAP=label_map.pbtxt
