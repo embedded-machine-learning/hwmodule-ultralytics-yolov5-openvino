@@ -13,7 +13,7 @@ For validating the tool chain, download the small validation set from kaggle: ht
 
 It contains a snall set that is used for inference validation in the structure that is compatible to the EML Tools. Put it in the following folder structure
 
-To be able to use the dataset, it is necessary to have a trained model of yolov5 on the Oxford Pets dataset. It can be done here: TBD Link YoloV5 on Server.
+To be able to use the dataset, it is necessary to have a trained model of yolov5 on the Oxford Pets dataset. It can be done here: https://github.com/embedded-machine-learning/hwmodule-ultralytics-yolov5-server.
 
 ### Generate EML Tools directory structure
 The following steps are only necessary if you setup the EML tools for the first time on a device:
