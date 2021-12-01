@@ -6,7 +6,7 @@ evaluations are compatible with the EML tools.
 ## Setup
 
 ### Prerequisites
-1. Setup the task spooler on the target device. Instructions can be found here: https://github.com/embedded-machine-learning/scripts-and-guides/blob/main/guides/task_spooler_manual.md
+Setup the task spooler on the target device. Instructions can be found here: https://github.com/embedded-machine-learning/scripts-and-guides/blob/main/guides/task_spooler_manual.md
 
 ### Dataset
 For validating the tool chain, download the small validation set from kaggle: https://www.kaggle.com/alexanderwendt/oxford-pets-cleaned-for-eml-tools
@@ -16,9 +16,11 @@ It contains a snall set that is used for inference validation in the structure t
 To be able to use the dataset, it is necessary to have a trained model of yolov5 on the Oxford Pets dataset. It can be done here: TBD Link YoloV5 on Server.
 
 ### Generate EML Tools directory structure
-The following steps are only necessary if you setup the EML tools for the first time on a device.
+The following steps are only necessary if you setup the EML tools for the first time on a device:
+
 1. Create a folder for your datasets. Usually, multiple users use one folder for all datasets to be able to share them. Later on, in the 
 training and inference scripts, you will need the path to the dataset.
+
 2. Create the EML tools folder structure. The structure can be found here: https://github.com/embedded-machine-learning/eml-tools#interface-folder-structure
 
 In your root directory, create the structure. Sample code
@@ -27,11 +29,15 @@ mkdir eml_projects
 mkdir venv
 
 ```
+
 3. Clone the EML tools repository into your workspace
+
 ```
 git clone https://github.com/embedded-machine-learning/eml-tools.git
 ```
+
 4. Create the task spooler script to be able to use the correct task spooler on the device. In our case, just copy
+
 ```./init_ts.sh``` to the workspace root. The idea is that all projects will use this task spooler.
 
 ### Project setup
@@ -67,7 +73,8 @@ pip install onnx-simplifier networkx defusedxml
 
 ```
 
-3. Create a virtual environment for OpenVino in Python 3.6 as it does not cope with Python 3.8
+3. Create a virtual environment for OpenVino 2021.4 in Python 3.6 as it does not cope with Python 3.8
+4. 
 ```
 # From root
 cd ./venv
@@ -86,7 +93,6 @@ pip install onnx-simplifier networkx defusedxml progress
 
 ```
 
-
 4. Copy the scripts from this folder to your project folder and execute ```chmod 777 *.sh``` in the yolov5 folder.
 
 5. Execute ```setup_dirs.sh``` to create all necessary sub folders
@@ -96,8 +102,7 @@ https://github.com/embedded-machine-learning/eml-tools#interface-network-folder-
 By default, each model folder contains a ```saved_model.pt```, a ```saved_model.torchscript.pt``` and a ```saved_model.onnx```. For our execution, 
 the ```saved_model.onnx``` is necessary.
 
-
-### Modification of script files
+### Adaption of Script Files
 The next step is to adapt the script files to the current environment.
 
 #### Adapt Task Spooler Script
@@ -115,13 +120,17 @@ to your task spooler path or call another task spooler script in your EML Tools 
 
 In ```init_env.sh```, adapt the ```source ../../venv/yolov5_pv38/bin/activate``` to your venv folder or conda implementation.
 
-#### Conversion script for ONNX models of yolov5 to OpenVino IR model
+#### Conversion Script for ONNX models of Yolov5 to OpenVino IR Model
 The first script to adapt is ```convert_yolo_onnx_to_ir_TEMPLATE.sh```. 
+
 1. Get the output nodes of the ONNX file from https://github.com/embedded-machine-learning/hwmodule-ultralytics-yolov5-openvino#onnx-to-openvino
+
 2. Copy and rename ```convert_yolo_onnx_to_ir_TEMPLATE.sh``` to ```convert_yolo_onnx_to_ir_[MODELNAME].sh```, e.g. 
 ```convert_yolo_onnx_to_ir_pt_yolov5s_640x360_oxfordpets_e300.sh```, where the MODELNAME is a exact match of the folder name of the model in ```exported-models```.
 Now, this script will only be used to convert this model. Note that the MODELNAME will be extracted from the file name and information about the implementation will be extracted for the evaluation.
+
 3. Edit the script and adapt the following constants for your conversion:
+
 ```
 USEREMAIL=alexander.wendt@tuwien.ac.at			 #Your email
 SCRIPTPREFIX=../../eml-tools    #There should be no need to change this
@@ -168,6 +177,7 @@ HARDWARETYPELIST="CPU GPU MYRIAD"   # Set which devices you want to execute on. 
 ```
 
 #### Add Folder Jobs for Pytorch
+
 ```add_folder_infpt_jobs.sh``` reads all names from the exported-folder, copies the ```pt_yolov5_train_export_inf_TEMPLATE.sh```, replaces TEMPLATE with the model name
 and puts the created script into the task spooler. The task spooler then executes all models in the queue.
 
@@ -179,6 +189,7 @@ MODELSOURCE=exported-models/*    # No need to change this unless you are debuggi
 ```
 
 #### Add Folder Jobs for OpenVino
+
 ```add_folder_infopenvino_jobs.sh``` reads all names from the exported-folder, copies the ```openvino_inf_eval_yolo_onnx_TEMPLATE.sh```, replaces TEMPLATE with the model name
 and puts the created script into the task spooler. The task spooler then executes all models in the queue.
 
@@ -190,6 +201,14 @@ MODELSOURCE=exported-models-openvino/*	#No need to change this
 ```
 
 ## Running the system
+
 1. Convert each exported model by running ```./convert_yolo_onnx_to_ir_[MODELNAME].sh```. You now get an FP16 and an FP32 model in ```./exported-models-openvino```
 2. Run either ```add_folder_infopenvino_jobs.sh``` and ```add_folder_infpt_jobs.sh``` or just ```add_all_inference.sh```. If everything works, all inferences are executed
 and the results are put in the ```./results``` folder under the name ```combined_results_[HARDWARENAME].csv```
+
+## Embedded Machine Learning Laboratory
+
+This repository is part of the Embedded Machine Learning Laboratory at the TU Wien. For more useful guides and various scripts for many different platforms visit 
+our **EML-Tools**: **https://github.com/embedded-machine-learning/eml-tools**.
+
+Our newest projects can be viewed on our **webpage**: **https://eml.ict.tuwien.ac.at/**
