@@ -1,8 +1,7 @@
 # hwmodule-ultralytics-yolov5-openvino
-This repository contains a workflow for the conversion of Yolov3 and Yolov5 from Pytorch to Openvino over ONNX and bounding box evaluation of the network. The general setup guide
-follows below. 
+This repository contains a workflow for the conversion of Yolov5 from Pytorch to Openvino over ONNX and bounding box evaluation of the network. The evaluation can be applied to Yolov3 as well.
 
-It also contain complete scripts and templates to setup an EML-Tool project on OpenVino. [EML-Tools](https://github.com/embedded-machine-learning/eml-tools) is a collection of 
+It also contain complete scripts and templates to setup an EML-Tool project on OpenVino. [EML-Tools](https://github.com/embedded-machine-learning/eml-tools) is a collection of
 scripts to train and execute networks on hardware. A complete guide how to setup YoloV5 on OpenVino with the EML Tools can be found here: [./eml-tools_project_template](./eml-tools_project_template)
 
 # How to setup YOLOV5 on OpenVino
@@ -17,21 +16,20 @@ A yolov5 on Openvino demo repository: https://github.com/violet17/yolov5_demo.gi
 
 ```console
 # input the following commands in your console session
-git clone https://github.com/ultralytics/yolov5.git
-git clone https://github.com/violet17/yolov5_demo.git
+git clone git@github.com:embedded-machine-learning/hwmodule-ultralytics-yolov5-openvino.git --recurse-submodules
 ```
 
 ## Virtual Environment
 It is recommended to work with a python virtual environment to avoid version conflicts between pip packages.
 
 ```console
-cd yolov5 # navigate to the cloned yolov5 ultralytics repo
+cd ./hwmodule-ultralytics-yolov5-openvino/ # navigate to the cloned repo
 python3 -m venv venv_yolov5 # this creates an empty virtual environment
 source venv_yolov5/bin/activate # activate the environment
 # now update the basic pip packages
 pip3 install --upgrade pip setuptools
 # install all necessary tools for the conversion to onnx
-pip3 install -r requirements.txt
+pip3 install -r ./yolov5/requirements.txt
 # and finally some packages for the Openvino conversion script
 pip3 install networkx defusedxml progress
 ```
@@ -41,6 +39,7 @@ pip3 install networkx defusedxml progress
 The original model was developed in Pytorch. To convert the model to Openvino, we need to first convert the model from Pytorch to ONNX. The next command shoudĺd generate a yolov5s.onnx model in the models folder
 
 ```console
+cd ./yolov5/
 python3 export.py --weights models/yolov5s.pt --include onnx --simplify
 ```
 
@@ -78,23 +77,30 @@ Adjust the flags according to your needs. The parameter --scale 255 should not b
 
 ## Model execution on Hardware
 
-Now we can try the models in different frameworks and on different devices. Lets start with the simplified ONNX model.
+Now we can try the models in different frameworks and on different devices.
+When working with Openvino, there are usually multiple devices available for inference. In the following examples the inference finds place on the NCS2, which is defined by the flag -d MYRIAD. If you are working on an x86/x64 architecture, you usually can substitute MYRIAD for CPU to test the inference on your CPU.
+
+### OONX Inference
+Lets start with the simplified ONNX model.
 
 ```console
 # run detect to try out the model; also accepts images as input; cam for webcam
-python3 detect.py --source cam --device cpu --view-img --nosave
+python3 detect.py --source 0 --device cpu --view-img --nosave
 ```
 
+### Openvino Benchmark Inference
 We can see if the model can be executed on the NCS2 with the help of the benchmark_app from the Openvino framework.
 
 ```console
+# you might have to adjust the path to your Openvino installation
 python3 /opt/intel/openvino_2021.4.689/deployment_tools/tools/benchmark_tool/benchmark_app.py \
---path_to_model models/yolov5_simpl_FP16.xml \
--niter 10 \ # number of execution iterations
--nireq 1 \ # number of inference requests
--d MYRIAD # change to CPU to run model on the CPU
+--path_to_model models/yolov5s_FP16.xml \
+-niter 10 \
+-nireq 1 \
+-d MYRIAD
 ```
 
+### Yolov5_demo inference
 Finally, to look at the detection results, we can use the yolov5_demo.git repository. Download the coco labels from: https://github.com/amikelive/coco-labels/blob/master/coco-labels-2014_2017.txt
 
 ```console
@@ -107,8 +113,8 @@ Now run the demo script with parameters of your choosing.
 ```console
 python3 yolov5_demo_OV2021.3.py \
 --input cam \
---model ../yolov5/models/yolov5s_simpl_FP16.xml \
--d MYRIAD \ # or CPU
+--model ../yolov5/models/yolov5s_FP16.xml \
+-d MYRIAD \
 --labels coco-labels-2014_2017.txt \
 -t 0.5
 ```
@@ -136,9 +142,11 @@ This guide was updated on the 25.11.2021 using the following software versions:
 * Opencv-python: 4.5.4.58
 * Numpy: 1.19.5
 
+This process was tested only on Ubuntu 18.04.
+
 ## Embedded Machine Learning Laboratory
 
-This repository is part of the Embedded Machine Learning Laboratory at the TU Wien. For more useful guides and various scripts for many different platforms visit 
+This repository is part of the Embedded Machine Learning Laboratory at the TU Wien. For more useful guides and various scripts for many different platforms visit
 our **EML-Tools**: **https://github.com/embedded-machine-learning/eml-tools**.
 
 Our newest projects can be viewed on our **webpage**: **https://eml.ict.tuwien.ac.at/**
