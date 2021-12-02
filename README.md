@@ -1,6 +1,5 @@
 # hwmodule-ultralytics-yolov5-openvino
-This repository contains a workflow for the conversion of Yolov3 and Yolov5 from Pytorch to Openvino over ONNX and bounding box evaluation of the network. The general setup guide
-follows below.
+This repository contains a workflow for the conversion of Yolov5 from Pytorch to Openvino over ONNX and bounding box evaluation of the network. The evaluation can be applied to Yolov3 as well.
 
 It also contain complete scripts and templates to setup an EML-Tool project on OpenVino. [EML-Tools](https://github.com/embedded-machine-learning/eml-tools) is a collection of
 scripts to train and execute networks on hardware. A complete guide how to setup YoloV5 on OpenVino with the EML Tools can be found here: [./eml-tools_project_template](./eml-tools_project_template)
