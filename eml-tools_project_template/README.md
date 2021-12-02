@@ -11,7 +11,7 @@ Setup the task spooler on the target device. Instructions can be found here: htt
 ### Dataset
 For validating the tool chain, download the small validation set from kaggle: https://www.kaggle.com/alexanderwendt/oxford-pets-cleaned-for-eml-tools
 
-It contains a snall set that is used for inference validation in the structure that is compatible to the EML Tools. Put it in the following folder structure
+It contains a small set that is used for inference validation in the structure that is compatible to the EML Tools. Put it in the following folder structure
 
 To be able to use the dataset, it is necessary to have a trained model of yolov5 on the Oxford Pets dataset. It can be done here: https://github.com/embedded-machine-learning/hwmodule-ultralytics-yolov5-server.
 
@@ -137,7 +137,7 @@ SCRIPTPREFIX=../../eml-tools    #There should be no need to change this
 HARDWARENAME=IntelNUC							#Hardware identifier
 
 # IMPORTANT: The output nodes of YoloV5 have to be defined separately for each network. Look 
-# at the network in netron and put the node numbers here. 
+# at the network in [Netron](https://netron.app/) and put the node numbers here. 
 # The Conv numbers are the same for all resolutions of a certain model
 OUTPUT_NODES=Conv_245,Conv_294,Conv_343
 
@@ -170,7 +170,7 @@ SCRIPTPREFIX=../../eml-tools
 HARDWARENAME=IntelNUC
 DATASET=../../../datasets/dataset-oxford-pets-val-debug
 
-#Openvino installation directory for the inferrer (not necessary the same as the model optimizer)
+# Openvino installation directory for the inferrer (not necessary the same as the model optimizer)
 OPENVINOINSTALLDIR=/opt/intel/openvino_2021.4.582
 HARDWARETYPELIST="CPU GPU MYRIAD"   # Set which devices you want to execute on. MYRIAD is the NCS2
 
@@ -178,8 +178,7 @@ HARDWARETYPELIST="CPU GPU MYRIAD"   # Set which devices you want to execute on. 
 
 #### Add Folder Jobs for Pytorch
 
-```add_folder_infpt_jobs.sh``` reads all names from the exported-folder, copies the ```pt_yolov5_train_export_inf_TEMPLATE.sh```, replaces TEMPLATE with the model name
-and puts the created script into the task spooler. The task spooler then executes all models in the queue.
+```add_folder_infpt_jobs.sh``` reads all names from the exported-folder, copies the ```pt_yolov5_train_export_inf_TEMPLATE.sh```, replaces TEMPLATE with the model name and puts the created script into the task spooler. The task spooler then executes all models in the queue.
 
 Adapt the following constants for your environment:
 ```
