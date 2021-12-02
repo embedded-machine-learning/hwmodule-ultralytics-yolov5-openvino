@@ -89,7 +89,7 @@ pip install --upgrade setuptools cython wheel
 pip install lxml xmltodict tdqm beautifulsoup4 pycocotools pandas absl-py
 
 # Install OpenVino libraries
-pip install onnx-simplifier networkx defusedxml progress
+pip install onnx-simplifier networkx defusedxml progress requests
 
 ```
 
