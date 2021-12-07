@@ -28,7 +28,7 @@ echo "Setup task spooler socket."
 . ./init_ts.sh
 
 #Send start mail
-ts -L Send_start $CURRENTFOLDER/sendmail_Start_TF2_IntelNUC.sh
+ts -L Send_start $CURRENTFOLDER/sendmail_Start_YoloV5_IntelNUC.sh
 
 for f in $MODELSOURCE
 do
@@ -42,5 +42,5 @@ do
 done
 
 #Send stop mail
-ts -L Send_stop $CURRENTFOLDER/sendmail_Stop_TF2_IntelNUC.sh
+ts -L Send_stop $CURRENTFOLDER/sendmail_Stop_YoloV5_IntelNUC.sh
 

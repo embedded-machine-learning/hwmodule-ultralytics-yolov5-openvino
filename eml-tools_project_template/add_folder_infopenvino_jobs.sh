@@ -29,7 +29,7 @@ echo "Setup task spooler socket."
 
 
 #Send start mail
-ts -L Send_Start $CURRENTFOLDER/sendmail_Start_OpenVino_IntelNUC.sh
+ts -L Send_Start $CURRENTFOLDER/sendmail_Start_OpenVino-YoloV5_IntelNUC.sh
 
 for f in $MODELSOURCE
 do
@@ -43,5 +43,5 @@ do
 done
 
 #Send stop mail
-ts -L Send_stop $CURRENTFOLDER/sendmail_Stop_OpenVino_IntelNUC.sh
+ts -L Send_stop $CURRENTFOLDER/sendmail_Stop_OpenVino-YoloV5_IntelNUC.sh
 

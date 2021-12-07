@@ -6,7 +6,11 @@ evaluations are compatible with the EML tools.
 ## Setup
 
 ### Prerequisites
-Setup the task spooler on the target device. Instructions can be found here: https://github.com/embedded-machine-learning/scripts-and-guides/blob/main/guides/task_spooler_manual.md
+1. Setup the task spooler on the target device. Instructions can be found here: https://github.com/embedded-machine-learning/scripts-and-guides/blob/main/guides/task_spooler_manual.md
+
+2. Install OpenVino. In this implementation, we used openvino_2021.4.582
+
+3. Setup sendmail according to this guide https://github.com/embedded-machine-learning/scripts-and-guides/blob/main/guides/SENDMAIL.md
 
 ### Dataset
 For validating the tool chain, download the small validation set from kaggle: https://www.kaggle.com/alexanderwendt/oxford-pets-cleaned-for-eml-tools
@@ -115,10 +119,12 @@ chmod 777 /srv/ts_socket/CPU.socket
 
 to your task spooler path or call another task spooler script in your EML Tools root.
 ```
-. ../../init_eda_ts.sh
+. ../../init_ts.sh
 ```
 
 In ```init_env.sh```, adapt the ```source ../../venv/yolov5_pv38/bin/activate``` to your venv folder or conda implementation.
+
+In ```init_env_openvino.sh```, adapt ```source ../../venv/openvino_py36/bin/activate``` to match your openvino virtual environment. 
 
 #### Conversion Script for ONNX models of Yolov5 to OpenVino IR Model
 The first script to adapt is ```convert_yolo_onnx_to_ir_TEMPLATE.sh```. 
@@ -175,6 +181,18 @@ OPENVINOINSTALLDIR=/opt/intel/openvino_2021.4.582
 HARDWARETYPELIST="CPU GPU MYRIAD"   # Set which devices you want to execute on. MYRIAD is the NCS2
 
 ```
+
+#### Send Mail
+To get notifications when the jobs start and stop, the program can send mails to the user. Each Sendmail script consists of a prefix ```sendmail_[TEMPLATE]``` 
+and a action-hardware part. The script reads the latter part and uses it as subject and content in a mail. Here is an example script for sending a mail when 
+the TF2 inference starts on the IntelNUC: ```sendmail_Start_TF2_IntelNUC.sh```
+
+For the proper scripts, the following constants need to be changed:
+
+```
+USEREMAIL=alexander.wendt@tuwien.ac.at
+```
+
 
 #### Add Folder Jobs for Pytorch
 
